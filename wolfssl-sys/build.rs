@@ -139,7 +139,9 @@ fn copy_dir_recursive(src: &Path, dest: &Path) -> std::io::Result<()> {
 }
 
 const PATCH_DIR: &str = "patches";
-const PATCHES: &[&str] = &["CVPN-1945-Lower-max-mtu-for-DTLS-1.3-handshake-message.patch"];
+// patch for I405: Remove expressvpn-specific dtls 1.3 patch
+// const PATCHES: &[&str] = &["CVPN-1945-Lower-max-mtu-for-DTLS-1.3-handshake-message.patch"];
+const PATCHES: &[&str] = &[];
 const OPTIONAL_FEATURES: &[&str] = &["aesccm", "dh", "opensslall", "opensslextra", "psk"];
 const MACRO_FEATURES: &[(&str, &str)] = &[("ex_data", "HAVE_EX_DATA"), ("alpn", "HAVE_ALPN")];
 
@@ -315,8 +317,9 @@ fn build_wolfssl(wolfssl_src: &Path) -> PathBuf {
         // CFLAGS
         .cflag("-g")
         .cflag("-fPIC")
-        .cflag("-DWOLFSSL_DTLS_ALLOW_FUTURE")
-        .cflag("-DDTLS13_MIN_RTX_INTERVAL=100")
+        // i405 patch: Remove unnecessary flags that affect dtls
+        // .cflag("-DWOLFSSL_DTLS_ALLOW_FUTURE")
+        // .cflag("-DDTLS13_MIN_RTX_INTERVAL=100")
         .cflag("-DWOLFSSL_MIN_RSA_BITS=2048")
         .cflag("-DWOLFSSL_MIN_ECC_BITS=256")
         .cflag("-DUSE_CERT_BUFFERS_4096")
